@@ -1,9 +1,9 @@
 package com.example.lab1;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.Checkable;
 import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
@@ -17,6 +17,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText usernameInput, passwordInput;
     Button loginButton, registerButton, clearButton;
     CheckBox rememberMe;
+    SharedPreferences myAccounts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,5 +29,34 @@ public class LoginActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        loginButton = findViewById(R.id.btnLogin);
+        registerButton = findViewById(R.id.btnRegister);
+        clearButton = findViewById(R.id.btnClear);
+
+        rememberMe = findViewById(R.id.cbRememberMe);
+
+        usernameInput = findViewById(R.id.etUsername);
+        passwordInput = findViewById(R.id.etPassword);
+
+        //TODO: SHARED PREFERENCES on 'myAccounts'
+
+
+    }
+
+
+    public void login(){
+
+
+    }
+
+    public void register(){
+
+
+    }
+
+    public void clear(){
+
+
     }
 }
