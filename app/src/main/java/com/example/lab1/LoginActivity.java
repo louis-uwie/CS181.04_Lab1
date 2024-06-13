@@ -41,6 +41,9 @@ public class LoginActivity extends AppCompatActivity {
 
         //TODO: SHARED PREFERENCES on 'myAccounts'
 
+        myAccounts = getSharedPreferences("myAccounts", MODE_PRIVATE);
+
+
 
     }
 
