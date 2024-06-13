@@ -19,7 +19,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText usernameInput, passwordInput;
     Button loginButton, registerButton, clearButton;
     CheckBox rememberMe;
-    SharedPreferences myAccounts;
+    SharedPreferences myAccounts = getSharedPreferences("myAccounts", MODE_PRIVATE);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +43,6 @@ public class LoginActivity extends AppCompatActivity {
 
         //TODO: SHARED PREFERENCES on 'myAccounts'
 
-        myAccounts = getSharedPreferences("myAccounts", MODE_PRIVATE);
-
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                
+
 
             }
         });

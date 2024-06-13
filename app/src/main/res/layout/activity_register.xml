@@ -22,7 +22,7 @@
         app:layout_constraintVertical_bias="0.189" />
 
     <EditText
-        android:id="@+id/editTextText"
+        android:id="@+id/etNewUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -51,8 +51,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="New Password:"
-        app:layout_constraintStart_toStartOf="@+id/editTextText"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText" />
+        app:layout_constraintStart_toStartOf="@+id/etNewUsername"
+        app:layout_constraintTop_toBottomOf="@+id/etNewUsername" />
 
     <EditText
         android:id="@+id/etNewPassword"
@@ -86,7 +86,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tvConfirmNewP" />
 
     <Button
-        android:id="@+id/btSave"
+        android:id="@+id/btnSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
@@ -96,12 +96,12 @@
         app:layout_constraintTop_toBottomOf="@+id/etConfirmNewP" />
 
     <Button
-        android:id="@+id/btCancel"
+        android:id="@+id/btnCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Cancel"
-        app:layout_constraintEnd_toEndOf="@+id/btSave"
-        app:layout_constraintStart_toStartOf="@+id/btSave"
-        app:layout_constraintTop_toBottomOf="@+id/btSave" />
+        app:layout_constraintEnd_toEndOf="@+id/btnSave"
+        app:layout_constraintStart_toStartOf="@+id/btnSave"
+        app:layout_constraintTop_toBottomOf="@+id/btnSave" />
 </androidx.constraintlayout.widget.ConstraintLayout>
