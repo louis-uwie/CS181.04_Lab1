@@ -105,6 +105,6 @@ public class LoginActivity extends AppCompatActivity {
 
         myAccounts.edit().clear().apply();
         Toast.makeText(this, "Shared Preferences Cleared", Toast.LENGTH_SHORT).show();
-        
+
     }
 }
