@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.lab1'
+    namespace 'com.binwag.labs'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.lab1"
+        applicationId "com.binwag.labs"
         minSdk 24
         targetSdk 34
         versionCode 1
