@@ -49,14 +49,18 @@ public class LoginActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 register();
+
             }
         });
 
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 clear();
+
             }
         });
 
@@ -64,8 +68,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
-
+                login();
 
             }
         });
@@ -83,13 +86,21 @@ public class LoginActivity extends AppCompatActivity {
 
         if(savedUsername != null && savedPassword != null){
             if(savedUsername.equals(inputUsername) && savedPassword.equals(inputPassword)){
+
                 Toast.makeText(this,"Login Successful.", Toast.LENGTH_SHORT).show();
+                Intent welcomeScreen = new Intent(this, WelcomeActivity.class);
+                startActivity(welcomeScreen);
+
             }
             else{
+
                 Toast.makeText(this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
+
             }
         } else{
+
             Toast.makeText(this, "Nothing Saved", Toast.LENGTH_SHORT).show();
+
         }
 
     }
