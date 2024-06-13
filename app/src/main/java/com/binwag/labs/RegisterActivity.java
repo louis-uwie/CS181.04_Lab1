@@ -1,4 +1,4 @@
-package com.example.lab1;
+package com.binwag.labs;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
