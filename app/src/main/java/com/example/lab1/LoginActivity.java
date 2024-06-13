@@ -19,7 +19,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText usernameInput, passwordInput;
     Button loginButton, registerButton, clearButton;
     CheckBox rememberMe;
-    SharedPreferences myAccounts = getSharedPreferences("myAccounts", MODE_PRIVATE);
+    SharedPreferences myAccounts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +31,8 @@ public class LoginActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        myAccounts = getSharedPreferences("myAccounts", MODE_PRIVATE);
 
         loginButton = findViewById(R.id.btnLogin);
         registerButton = findViewById(R.id.btnRegister);
