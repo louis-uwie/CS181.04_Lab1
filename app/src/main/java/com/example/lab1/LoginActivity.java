@@ -88,6 +88,18 @@ public class LoginActivity extends AppCompatActivity {
             if(savedUsername.equals(inputUsername) && savedPassword.equals(inputPassword)){
 
                 Toast.makeText(this,"Login Successful.", Toast.LENGTH_SHORT).show();
+
+                SharedPreferences.Editor editor = myAccounts.edit();
+                editor.putBoolean("rememberMe", rememberMe.isChecked());
+                if (rememberMe.isChecked()) {
+                    editor.putString("username", inputUsername);
+                    editor.putString("password", inputPassword);
+                } else {
+                    usernameInput.setText("");
+                    passwordInput.setText("");
+                }
+                editor.apply();
+
                 Intent welcomeScreen = new Intent(this, WelcomeActivity.class);
                 startActivity(welcomeScreen);
 

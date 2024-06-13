@@ -29,6 +29,7 @@ public class WelcomeActivity extends AppCompatActivity {
             return insets;
         });
 
+        exit = findViewById(R.id.btnExit);
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
