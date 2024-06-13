@@ -1,7 +1,9 @@
 package com.example.lab1;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -45,6 +47,13 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                register();
+            }
+        });
+
     }
 
 
@@ -54,8 +63,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void register(){
+        Intent registerActivity = new Intent(this, RegisterActivity.class);
 
-
+        startActivity(registerActivity);
     }
 
     public void clear(){
