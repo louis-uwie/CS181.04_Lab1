@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -74,13 +75,28 @@ public class LoginActivity extends AppCompatActivity {
 
     public void login(){
 
+        String inputUsername = usernameInput.getText().toString();
+        String inputPassword = passwordInput.getText().toString();
+
+        String savedUsername = myAccounts.getString("username", null);
+        String savedPassword = myAccounts.getString("password", null);
+
+        if(savedUsername != null && savedPassword != null){
+            if(savedUsername.equals(inputUsername) && savedPassword.equals(inputPassword)){
+                Toast.makeText(this,"Login Successful.", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Toast.makeText(this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
+            }
+        } else{
+            Toast.makeText(this, "Nothing Saved", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
     public void register(){
 
         Intent registerActivity = new Intent(this, RegisterActivity.class);
-
         startActivity(registerActivity);
 
     }
@@ -88,6 +104,7 @@ public class LoginActivity extends AppCompatActivity {
     public void clear(){
 
         myAccounts.edit().clear().apply();
-
+        Toast.makeText(this, "Shared Preferences Cleared", Toast.LENGTH_SHORT).show();
+        
     }
 }
