@@ -85,6 +85,7 @@ public class LoginActivity extends AppCompatActivity {
         String savedPassword = myAccounts.getString("password", null);
 
         if(savedUsername != null && savedPassword != null){
+
             if(savedUsername.equals(inputUsername) && savedPassword.equals(inputPassword)){
 
                 Toast.makeText(this,"Login Successful.", Toast.LENGTH_SHORT).show();
