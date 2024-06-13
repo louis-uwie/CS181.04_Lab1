@@ -45,12 +45,27 @@ public class LoginActivity extends AppCompatActivity {
 
         myAccounts = getSharedPreferences("myAccounts", MODE_PRIVATE);
 
-
-
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 register();
+            }
+        });
+
+        clearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clear();
+            }
+        });
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                
+
             }
         });
 
@@ -63,13 +78,16 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void register(){
+
         Intent registerActivity = new Intent(this, RegisterActivity.class);
 
         startActivity(registerActivity);
+
     }
 
     public void clear(){
 
+        myAccounts.edit().clear().apply();
 
     }
 }
