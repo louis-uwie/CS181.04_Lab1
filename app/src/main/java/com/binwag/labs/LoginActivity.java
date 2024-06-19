@@ -100,7 +100,10 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 editor.apply();
 
+                String LoggedIn = inputUsername;
+
                 Intent welcomeScreen = new Intent(this, WelcomeActivity.class);
+                welcomeScreen.putExtra("LoggedInUser",LoggedIn);
                 startActivity(welcomeScreen);
 
             }
