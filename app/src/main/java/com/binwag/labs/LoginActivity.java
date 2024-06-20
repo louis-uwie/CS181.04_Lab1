@@ -3,6 +3,7 @@ package com.binwag.labs;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -21,6 +22,7 @@ public class LoginActivity extends AppCompatActivity {
     Button loginButton, registerButton, clearButton;
     CheckBox rememberMe;
     SharedPreferences myAccounts;
+    Boolean cbChecked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +46,13 @@ public class LoginActivity extends AppCompatActivity {
         usernameInput = findViewById(R.id.etUsername);
         passwordInput = findViewById(R.id.etPassword);
 
-        //TODO: SHARED PREFERENCES on 'myAccounts'
+        cbChecked = myAccounts.getBoolean("remembered",false);
+
+        if(cbChecked){
+            usernameInput.setText(myAccounts.getString("username",null));
+            passwordInput.setText(myAccounts.getString("password",null));
+            rememberMe.setChecked(true);
+        }
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,19 +99,32 @@ public class LoginActivity extends AppCompatActivity {
 
                 SharedPreferences.Editor editor = myAccounts.edit();
                 editor.putBoolean("rememberMe", rememberMe.isChecked());
+
                 if (rememberMe.isChecked()) {
+
                     editor.putString("username", inputUsername);
                     editor.putString("password", inputPassword);
+                    editor.apply();
+
+                    editor.putBoolean("remembered", true);
+
+
                 } else {
                     usernameInput.setText("");
                     passwordInput.setText("");
+                    editor.remove("remembered");
                 }
+
                 editor.apply();
 
                 String LoggedIn = inputUsername;
 
                 Intent welcomeScreen = new Intent(this, WelcomeActivity.class);
                 welcomeScreen.putExtra("LoggedInUser",LoggedIn);
+
+                if(rememberMe.isChecked()){
+                    welcomeScreen.putExtra("RememberChecked", "Account Remembered");
+                }
                 startActivity(welcomeScreen);
 
             }

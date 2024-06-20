@@ -18,7 +18,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
     TextView wcText;
     Button exit;
-    String userLogged;
+    String userLogged, rememberChecked;
 
 
     @Override
@@ -32,10 +32,12 @@ public class WelcomeActivity extends AppCompatActivity {
             return insets;
         });
 
+
         userLogged = getIntent().getExtras().getString("LoggedInUser");
+        rememberChecked = getIntent().getExtras().getString("RememberChecked","");
 
         wcText = findViewById(R.id.tvWelcome);
-        wcText.setText("Welcome, " + userLogged + "!");
+        wcText.setText("Welcome, " + userLogged + "!" + rememberChecked);
 
         exit = findViewById(R.id.btnExit);
         exit.setOnClickListener(new View.OnClickListener() {
