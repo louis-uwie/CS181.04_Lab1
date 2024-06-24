@@ -93,20 +93,19 @@ public class LoginActivity extends AppCompatActivity {
         String savedPassword = myAccounts.getString("password", null);
 
         if(savedUsername != null && savedPassword != null){
+            String LoggedIn = inputUsername;
+
             if(savedUsername.equals(inputUsername) && savedPassword.equals(inputPassword)){
 
                 Toast.makeText(this,"Login Successful.", Toast.LENGTH_SHORT).show();
-
                 SharedPreferences.Editor editor = myAccounts.edit();
                 editor.putBoolean("rememberMe", rememberMe.isChecked());
 
                 if (rememberMe.isChecked()) {
-
                     editor.putString("username", inputUsername);
                     editor.putString("password", inputPassword);
-                    editor.apply();
-
                     editor.putBoolean("remembered", true);
+                    editor.apply();
 
 
                 } else {
@@ -117,39 +116,37 @@ public class LoginActivity extends AppCompatActivity {
 
                 editor.apply();
 
-                String LoggedIn = inputUsername;
-
                 Intent welcomeScreen = new Intent(this, WelcomeActivity.class);
+
                 welcomeScreen.putExtra("LoggedInUser",LoggedIn);
 
                 if(rememberMe.isChecked()){
                     welcomeScreen.putExtra("RememberChecked", "Account Remembered");
                 }
+
                 startActivity(welcomeScreen);
 
             }
             else{
-
                 Toast.makeText(this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
 
             }
         } else{
-
             Toast.makeText(this, "Nothing Saved", Toast.LENGTH_SHORT).show();
 
         }
 
     }
 
-    public void register(){
 
+    public void register(){
         Intent registerActivity = new Intent(this, RegisterActivity.class);
         startActivity(registerActivity);
 
     }
 
-    public void clear(){
 
+    public void clear(){
         myAccounts.edit().clear().apply();
         Toast.makeText(this, "Shared Preferences Cleared", Toast.LENGTH_SHORT).show();
 
