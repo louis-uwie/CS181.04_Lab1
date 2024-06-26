@@ -140,7 +140,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 }
 
-
 /**
  * -- LAB 2 --
  * Register
