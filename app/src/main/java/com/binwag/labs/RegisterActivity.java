@@ -48,10 +48,13 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if(newUser.isEmpty()){
                     Toast.makeText(RegisterActivity.this,"Name must not be blank.", Toast.LENGTH_SHORT).show();
+
                 } else if(newPass.isEmpty()){
                     Toast.makeText(RegisterActivity.this,"New Password must not be blank.", Toast.LENGTH_SHORT).show();
+
                 } else if (!newPass.equals(confPass)) {
                     Toast.makeText(RegisterActivity.this, "Confirm password does not match.", Toast.LENGTH_SHORT).show();
+
                 }
                 else{
                     SharedPreferences.Editor editor = myAccounts.edit();
