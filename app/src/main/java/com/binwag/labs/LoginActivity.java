@@ -25,10 +25,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Initialize Realm
         realm = Realm.getDefaultInstance();
+        myAccounts = getSharedPreferences("myAccounts", MODE_PRIVATE);
 
-        // Initialize UI elements
         usernameInput = findViewById(R.id.etUsername);
         passwordInput = findViewById(R.id.etPassword);
         loginButton = findViewById(R.id.btnLogin);
@@ -36,7 +35,16 @@ public class LoginActivity extends AppCompatActivity {
         clearButton = findViewById(R.id.btnClear);
         rememberMe = findViewById(R.id.cbRememberMe);
 
-        // Set onClick listeners
+        // Load saved credentials if "Remember Me" is checked
+        if (myAccounts.getBoolean("rememberMe", false)) {
+            String savedUsername = myAccounts.getString("username", "");
+            String savedPassword = myAccounts.getString("password", "");
+
+            usernameInput.setText(savedUsername);
+            passwordInput.setText(savedPassword);
+            rememberMe.setChecked(true);
+        }
+
         registerButton.setOnClickListener(v -> register());
         clearButton.setOnClickListener(v -> clear());
         loginButton.setOnClickListener(v -> login());
@@ -45,7 +53,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // Close the Realm instance when the Activity is destroyed
         if (realm != null) {
             realm.close();
         }
@@ -55,41 +62,48 @@ public class LoginActivity extends AppCompatActivity {
         String inputUsername = usernameInput.getText().toString();
         String inputPassword = passwordInput.getText().toString();
 
-        // Query Realm for the user with matching username and password
         User user = realm.where(User.class)
                 .equalTo("name", inputUsername)
-                .equalTo("password", inputPassword)
                 .findFirst();
 
         if (user != null) {
-            // Login successful
-            handleSuccessfulLogin(user);
+            // User found, check password
+            if (user.getPassword().equals(inputPassword)) {
+                // Password matches
+                handleSuccessfulLogin(user);
+            } else {
+                // Password doesn't match
+                Toast.makeText(this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
+            }
         } else {
-            // Invalid credentials
-            Toast.makeText(this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
+            // No user found with the given name
+            Toast.makeText(this, "No User found", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void handleSuccessfulLogin(User user) {
         Toast.makeText(this, "Login Successful.", Toast.LENGTH_SHORT).show();
 
-        // Save user's UUID instead of username/password in SharedPreferences
         saveUuid(user.getUuid());
 
-        // Handle rememberMe checkbox
         if (rememberMe.isChecked()) {
+            saveRememberMeState(true);
             saveCredentials(user.getName(), user.getPassword());
         } else {
+            saveRememberMeState(false);
             clearCredentials();
         }
 
-        // Proceed to WelcomeActivity
         startActivity(new Intent(this, WelcomeActivity.class));
+        finish();
     }
 
     public void register() {
         Intent registerActivity = new Intent(this, RegisterActivity.class);
         startActivity(registerActivity);
+
+        usernameInput.setText("");
+        passwordInput.setText("");
     }
 
     public void clear() {
@@ -101,15 +115,22 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = myAccounts.edit();
         editor.putString("username", username);
         editor.putString("password", password);
-        editor.putBoolean("rememberMe", true);
+        editor.apply();
+    }
+
+    private void saveRememberMeState(boolean isChecked) {
+        SharedPreferences.Editor editor = myAccounts.edit();
+        editor.putBoolean("rememberMe", isChecked);
         editor.apply();
     }
 
     private void clearCredentials() {
         SharedPreferences.Editor editor = myAccounts.edit();
-        editor.clear().apply();
-        usernameInput.setText("");
-        passwordInput.setText("");
+        editor.remove("username");
+        editor.remove("password");
+        editor.remove("rememberMe");
+        editor.apply();
+
     }
 
     private void saveUuid(String uuid) {
@@ -118,3 +139,23 @@ public class LoginActivity extends AppCompatActivity {
         editor.apply();
     }
 }
+
+
+/**
+ * -- LAB 2 --
+ * Register
+     * Enter credentials (a,1,1)
+     * Should toast “New User Saved. Total 1”
+     * Try registering the same name.
+     * Should error “User already exists”
+     * Try a different name (b,1,1)
+ * Login
+     * Login to the second new register.
+     * Success.
+     * Login with the Remember Me.
+     * Success. “You will be remembered!”
+     * Note, must have the username and password filled.
+ * Clear Preferences
+     * Does not clear realm. Only saved preferences.
+ * Register a new account
+ */

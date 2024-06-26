@@ -1,5 +1,6 @@
 package com.binwag.labs;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
@@ -19,6 +20,7 @@ public class WelcomeActivity extends AppCompatActivity {
     Button exit;
     SharedPreferences myAccounts;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,23 +33,26 @@ public class WelcomeActivity extends AppCompatActivity {
         });
 
         myAccounts = getSharedPreferences("myAccounts", MODE_PRIVATE);
-
         String savedUuid = myAccounts.getString("uuid", null);
+        boolean rememberMeChecked = myAccounts.getBoolean("rememberMe", false);
+
         if (savedUuid != null) {
             User user = Realm.getDefaultInstance().where(User.class)
                     .equalTo("uuid", savedUuid)
                     .findFirst();
+
             if (user != null) {
                 wcText = findViewById(R.id.tvWelcome);
-                wcText.setText("Welcome, " + user.getName() + "!");
+                if (rememberMeChecked) {
+                    wcText.setText("Welcome, " + user.getName() + "!\nYou will be remembered.");
+                } else {
+                    wcText.setText("Welcome, " + user.getName() + "!");
+                }
 
                 exit = findViewById(R.id.btnExit);
                 exit.setOnClickListener(v -> finish());
-            } else {
-                wcText.setText("Welcome!");
+
             }
-        } else {
-            wcText.setText("Welcome!");
         }
     }
 }
