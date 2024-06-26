@@ -3,17 +3,14 @@ package com.binwag.labs;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import io.realm.Realm;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -21,114 +18,103 @@ public class LoginActivity extends AppCompatActivity {
     Button loginButton, registerButton, clearButton;
     CheckBox rememberMe;
     SharedPreferences myAccounts;
+    Realm realm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
-        myAccounts = getSharedPreferences("myAccounts", MODE_PRIVATE);
+        // Initialize Realm
+        realm = Realm.getDefaultInstance();
 
+        // Initialize UI elements
+        usernameInput = findViewById(R.id.etUsername);
+        passwordInput = findViewById(R.id.etPassword);
         loginButton = findViewById(R.id.btnLogin);
         registerButton = findViewById(R.id.btnRegister);
         clearButton = findViewById(R.id.btnClear);
-
         rememberMe = findViewById(R.id.cbRememberMe);
 
-        usernameInput = findViewById(R.id.etUsername);
-        passwordInput = findViewById(R.id.etPassword);
-
-        //TODO: SHARED PREFERENCES on 'myAccounts'
-
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                register();
-
-            }
-        });
-
-        clearButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                clear();
-
-            }
-        });
-
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                login();
-
-            }
-        });
-
+        // Set onClick listeners
+        registerButton.setOnClickListener(v -> register());
+        clearButton.setOnClickListener(v -> clear());
+        loginButton.setOnClickListener(v -> login());
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Close the Realm instance when the Activity is destroyed
+        if (realm != null) {
+            realm.close();
+        }
+    }
 
-    public void login(){
-
+    public void login() {
         String inputUsername = usernameInput.getText().toString();
         String inputPassword = passwordInput.getText().toString();
 
-        String savedUsername = myAccounts.getString("username", null);
-        String savedPassword = myAccounts.getString("password", null);
+        // Query Realm for the user with matching username and password
+        User user = realm.where(User.class)
+                .equalTo("name", inputUsername)
+                .equalTo("password", inputPassword)
+                .findFirst();
 
-        if(savedUsername != null && savedPassword != null){
+        if (user != null) {
+            // Login successful
+            handleSuccessfulLogin(user);
+        } else {
+            // Invalid credentials
+            Toast.makeText(this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
+        }
+    }
 
-            if(savedUsername.equals(inputUsername) && savedPassword.equals(inputPassword)){
+    private void handleSuccessfulLogin(User user) {
+        Toast.makeText(this, "Login Successful.", Toast.LENGTH_SHORT).show();
 
-                Toast.makeText(this,"Login Successful.", Toast.LENGTH_SHORT).show();
+        // Save user's UUID instead of username/password in SharedPreferences
+        saveUuid(user.getUuid());
 
-                SharedPreferences.Editor editor = myAccounts.edit();
-                editor.putBoolean("rememberMe", rememberMe.isChecked());
-                if (rememberMe.isChecked()) {
-                    editor.putString("username", inputUsername);
-                    editor.putString("password", inputPassword);
-                } else {
-                    usernameInput.setText("");
-                    passwordInput.setText("");
-                }
-                editor.apply();
-
-                Intent welcomeScreen = new Intent(this, WelcomeActivity.class);
-                startActivity(welcomeScreen);
-
-            }
-            else{
-
-                Toast.makeText(this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
-
-            }
-        } else{
-
-            Toast.makeText(this, "Nothing Saved", Toast.LENGTH_SHORT).show();
-
+        // Handle rememberMe checkbox
+        if (rememberMe.isChecked()) {
+            saveCredentials(user.getName(), user.getPassword());
+        } else {
+            clearCredentials();
         }
 
+        // Proceed to WelcomeActivity
+        startActivity(new Intent(this, WelcomeActivity.class));
     }
 
-    public void register(){
-
+    public void register() {
         Intent registerActivity = new Intent(this, RegisterActivity.class);
         startActivity(registerActivity);
-
     }
 
-    public void clear(){
-
-        myAccounts.edit().clear().apply();
+    public void clear() {
+        clearCredentials();
         Toast.makeText(this, "Shared Preferences Cleared", Toast.LENGTH_SHORT).show();
+    }
 
+    private void saveCredentials(String username, String password) {
+        SharedPreferences.Editor editor = myAccounts.edit();
+        editor.putString("username", username);
+        editor.putString("password", password);
+        editor.putBoolean("rememberMe", true);
+        editor.apply();
+    }
+
+    private void clearCredentials() {
+        SharedPreferences.Editor editor = myAccounts.edit();
+        editor.clear().apply();
+        usernameInput.setText("");
+        passwordInput.setText("");
+    }
+
+    private void saveUuid(String uuid) {
+        SharedPreferences.Editor editor = myAccounts.edit();
+        editor.putString("uuid", uuid);
+        editor.apply();
     }
 }
