@@ -1,9 +1,11 @@
 package com.binwag.labs;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -19,6 +21,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     EditText NewUsername, NewPassword, ConfirmNewP;
     Button SaveButton, CancelButton;
+    TextView labelHeader;
 
     private Realm realm;
 
@@ -35,12 +38,23 @@ public class RegisterActivity extends AppCompatActivity {
 
         realm = Realm.getDefaultInstance();
 
-        NewUsername = findViewById(R.id.etNewUsername);
-        NewPassword = findViewById(R.id.etNewPassword);
+        NewUsername = findViewById(R.id.etEditUsername);
+        NewPassword = findViewById(R.id.etEditPassword);
         ConfirmNewP = findViewById(R.id.etConfirmNewP);
 
-        SaveButton = findViewById(R.id.btnSave);
-        CancelButton = findViewById(R.id.btnCancel);
+        SaveButton = findViewById(R.id.btnSaveEdit);
+        CancelButton = findViewById(R.id.btnCancelEdit);
+
+        labelHeader = findViewById(R.id.tvEditUser);
+
+        Intent receivedIntent = getIntent();
+        if (receivedIntent != null) {
+            String editUserText = receivedIntent.getStringExtra("EditUser");
+            if (editUserText != null) {
+                labelHeader.setText(editUserText);
+            }
+        }
+
 
         SaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,7 +70,7 @@ public class RegisterActivity extends AppCompatActivity {
                 } else if (!newPass.equals(confPass)) {
                     Toast.makeText(RegisterActivity.this, "Confirm password does not match.", Toast.LENGTH_SHORT).show();
                 } else {
-                    // Check if user already exists in Realm
+                    // Check if user already exists
                     if (userExists(newUser)) {
                         Toast.makeText(RegisterActivity.this, "User already exists", Toast.LENGTH_SHORT).show();
                     } else {
@@ -76,7 +90,6 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private boolean userExists(String username) {
-        // Query Realm for existing user with the given username
         RealmResults<User> results = realm.where(User.class).equalTo("name", username).findAll();
         return !results.isEmpty();
     }

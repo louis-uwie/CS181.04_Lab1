@@ -18,7 +18,7 @@ import io.realm.Realm;
 public class LoginActivity extends AppCompatActivity {
 
     EditText usernameInput, passwordInput;
-    Button loginButton, registerButton, clearButton;
+    Button loginButton, registerButton, clearButton, adminButton;
     CheckBox rememberMe;
     SharedPreferences myAccounts;
     Realm realm;
@@ -38,9 +38,12 @@ public class LoginActivity extends AppCompatActivity {
 
         usernameInput = findViewById(R.id.etUsername);
         passwordInput = findViewById(R.id.etPassword);
+
         loginButton = findViewById(R.id.btnLogin);
         registerButton = findViewById(R.id.btnRegister);
         clearButton = findViewById(R.id.btnClear);
+        adminButton = findViewById(R.id.btnAdmin);
+
         rememberMe = findViewById(R.id.cbRememberMe);
 
         if (myAccounts.getBoolean("rememberMe", false)) {
@@ -55,6 +58,7 @@ public class LoginActivity extends AppCompatActivity {
         registerButton.setOnClickListener(v -> register());
         clearButton.setOnClickListener(v -> clear());
         loginButton.setOnClickListener(v -> login());
+        adminButton.setOnClickListener(v -> adminLog());
     }
 
     @Override
@@ -105,6 +109,11 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
+    public void adminLog() {
+        Intent adminActivity = new Intent(this, UserManagement.class);
+        startActivity(adminActivity);
+    }
+
     public void register() {
         Intent registerActivity = new Intent(this, RegisterActivity.class);
         startActivity(registerActivity);
@@ -148,20 +157,19 @@ public class LoginActivity extends AppCompatActivity {
 }
 
 /**
- * -- LAB 2 --
- * Register
-     * Enter credentials (a,1,1)
-     * Should toast “New User Saved. Total 1”
-     * Try registering the same name.
-     * Should error “User already exists”
-     * Try a different name (b,1,1)
- * Login
-     * Login to the second new register.
-     * Success.
-     * Login with the Remember Me.
-     * Success. “You will be remembered!”
-     * Note, must have the username and password filled.
- * Clear Preferences
-     * Does not clear realm. Only saved preferences.
- * Register a new account
+ * Lab 3:  RecyclerView and Realm
+ * User Management
+ * Using your previous, replace the “Register” with an “Admin” Button, this will open the User Management screen
+ * Admin Screen
+ * Contains a RecyclerView where each row contains:
+ * -	name
+ * -	password
+ * -	A button to delete the row
+ * -	A button to edit the row (click this will open a screen similar to the Register Activity)
+ * Below the RecyclerView are two buttons
+ * -	Add – opens a new Register UI to add to the list (this is where the old Register functionality will go)
+ * -	Clear  – clears all the current users from Realm
+ *
+ * Bonus:
+ * Add a prompt to confirm yes or no on delete.
  */

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UserManagement">
+
+    <TextView
+        android:id="@+id/tvAdminHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="176dp"
+        android:layout_marginTop="66dp"
+        android:layout_marginEnd="178dp"
+        android:text="Admin - User Management"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.048" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvUsers"
+        android:layout_width="237dp"
+        android:layout_height="238dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintEnd_toEndOf="@+id/tvAdminHeader"
+        app:layout_constraintHorizontal_bias="0.489"
+        app:layout_constraintStart_toStartOf="@+id/tvAdminHeader"
+        app:layout_constraintTop_toBottomOf="@+id/tvAdminHeader" />
+
+    <Button
+        android:id="@+id/btnAddRealmUsr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="Add User"
+        app:layout_constraintStart_toStartOf="@+id/rvUsers"
+        app:layout_constraintTop_toBottomOf="@+id/rvUsers" />
+
+    <Button
+        android:id="@+id/btnClearRealm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Clear Users"
+        app:layout_constraintStart_toStartOf="@+id/btnAddRealmUsr"
+        app:layout_constraintTop_toBottomOf="@+id/btnAddRealmUsr" />
+
+    <TextView
+        android:id="@+id/tvHeaderUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="User"
+        app:layout_constraintBottom_toTopOf="@+id/rvUsers"
+        app:layout_constraintStart_toStartOf="@+id/rvUsers" />
+
+    <TextView
+        android:id="@+id/tvHeaderPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="Password"
+        app:layout_constraintBottom_toTopOf="@+id/rvUsers"
+        app:layout_constraintStart_toEndOf="@+id/tvHeaderUser" />
+</androidx.constraintlayout.widget.ConstraintLayout>

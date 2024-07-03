@@ -5,14 +5,14 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegisterActivity">
+    tools:context=".EditUser">
 
     <TextView
         android:id="@+id/tvEditUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scrollbarSize="4dp"
-        android:text="Register"
+        android:text="EditUser"
         android:textSize="34dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:ems="10"
-        android:hint="New User Name"
+        android:hint="Edit Username"
         android:inputType="text"
         app:layout_constraintStart_toStartOf="@+id/tvEditUsername"
         app:layout_constraintTop_toBottomOf="@+id/tvEditUsername" />
@@ -37,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="New User Name:"
+        android:text="Change User Name:"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.189"
@@ -50,7 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="New Password:"
+        android:text="Change Password"
         app:layout_constraintStart_toStartOf="@+id/etEditUsername"
         app:layout_constraintTop_toBottomOf="@+id/etEditUsername" />
 
@@ -60,7 +60,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:ems="10"
-        android:hint="New Password"
+        android:hint="Edit Password"
         android:inputType="textPassword"
         app:layout_constraintStart_toStartOf="@+id/tvEditPassword"
         app:layout_constraintTop_toBottomOf="@+id/tvEditPassword" />
@@ -70,7 +70,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Confirm New Password:"
+        android:text="Confirm Password"
         app:layout_constraintStart_toStartOf="@+id/etEditPassword"
         app:layout_constraintTop_toBottomOf="@+id/etEditPassword" />
 
@@ -90,7 +90,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:text="Save"
+        android:text="Save Changes"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etConfirmNewP" />
@@ -100,7 +100,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Cancel"
+        android:text="Cancel Changes"
         app:layout_constraintEnd_toEndOf="@+id/btnSaveEdit"
         app:layout_constraintStart_toStartOf="@+id/btnSaveEdit"
         app:layout_constraintTop_toBottomOf="@+id/btnSaveEdit" />
