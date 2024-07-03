@@ -39,6 +39,7 @@ dependencies {
 
     // REALM ADAPTER
     implementation files('libs\\realmadapter4.0.0.jar')
+    implementation libs.recyclerview
 
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
