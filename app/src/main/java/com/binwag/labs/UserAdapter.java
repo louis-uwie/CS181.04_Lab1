@@ -65,7 +65,7 @@ public class UserAdapter extends RealmRecyclerViewAdapter<User, UserAdapter.User
             holder.deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d("Deletion", "Clicked UserAdapterDelete");
+                    Log.d("Admin Functions", "Delete Button Clicked");
                     User userToDelete = (User) view.getTag();
                     activity.delete(userToDelete);
                 }
@@ -75,11 +75,10 @@ public class UserAdapter extends RealmRecyclerViewAdapter<User, UserAdapter.User
             holder.editButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Launch EditUser activity
+                    Log.d("Admin Functions", "Edit User Button Clicked");
                     Intent editIntent = new Intent(activity, EditUser.class);
                     editIntent.putExtra("userId", user.getUuid());
                     activity.startActivity(editIntent);
-                    Log.d("EditButton", "Edit Button Pressed!");
                 }
             });
         }

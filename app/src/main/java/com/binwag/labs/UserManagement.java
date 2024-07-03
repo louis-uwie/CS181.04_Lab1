@@ -24,7 +24,8 @@ public class UserManagement extends AppCompatActivity {
      * TODO:
      * Lab 3:  RecyclerView and Realm
      * User Management ★
-     *      Using your previous, replace the “Register” with an “Admin” Button, this will open the User Management screen ★
+     *      Using your previous, replace the “Register” with an “Admin” Button,
+     *      this will open the User Management screen ★
      * Admin Screen ★
      *      Contains a RecyclerView where each row contains: ★
      *      -	name ★
@@ -77,6 +78,7 @@ public class UserManagement extends AppCompatActivity {
         clearRlmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("Admin Functions", "Clear Realm Button Clicked");
                 clearRealmUser();
             }
         });
@@ -84,6 +86,7 @@ public class UserManagement extends AppCompatActivity {
         addUsrButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("Admin Functions", "Add User Button Clicked");
                 Intent registerActivity = new Intent(UserManagement.this, RegisterActivity.class);
                 startActivity(registerActivity);
             }
@@ -105,12 +108,14 @@ public class UserManagement extends AppCompatActivity {
             @Override
             public void execute(@NonNull Realm realm) {
                 realm.deleteAll();
+                Log.d("Admin Functions", "Cleared Realm");
             }
+
         });
     }
 
     public void delete(User userToDelete) {
-        Log.d("Deletion", "Clicked");
+        Log.d("Admin Functions", "Delete User - Clicked");
 
         String userUuid = userToDelete.getUuid();
 
@@ -120,11 +125,11 @@ public class UserManagement extends AppCompatActivity {
                 User user = realm.where(User.class).equalTo("uuid", userUuid).findFirst();
                 if (user != null) {
                     user.deleteFromRealm();
-                    Log.d("Deletion", "Deleted");
+                    Log.d("Admin Functions", "Delete User - Successfull");
                 }
             }
         });
 
-        Log.d("Deletion", "Success");
+        Log.d("Admin Functions", "Delete User - Out");
     }
 }
