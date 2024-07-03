@@ -38,16 +38,14 @@ public class RegisterActivity extends AppCompatActivity {
 
         realm = Realm.getDefaultInstance();
 
-
-
-        NewUsername = findViewById(R.id.etNewUsername);
-        NewPassword = findViewById(R.id.etNewPassword);
+        NewUsername = findViewById(R.id.etEditUsername);
+        NewPassword = findViewById(R.id.etEditPassword);
         ConfirmNewP = findViewById(R.id.etConfirmNewP);
 
-        SaveButton = findViewById(R.id.btnSave);
-        CancelButton = findViewById(R.id.btnCancel);
+        SaveButton = findViewById(R.id.btnSaveEdit);
+        CancelButton = findViewById(R.id.btnCancelEdit);
 
-        labelHeader = findViewById(R.id.tvRegister);
+        labelHeader = findViewById(R.id.tvEditUser);
 
         Intent receivedIntent = getIntent();
         if (receivedIntent != null) {

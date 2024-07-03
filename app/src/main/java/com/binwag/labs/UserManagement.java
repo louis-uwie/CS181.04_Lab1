@@ -24,18 +24,18 @@ public class UserManagement extends AppCompatActivity {
      * TODO:
      * Lab 3:  RecyclerView and Realm
      * User Management ★
-     * Using your previous, replace the “Register” with an “Admin” Button, this will open the User Management screen ★
+     *      Using your previous, replace the “Register” with an “Admin” Button, this will open the User Management screen ★
      * Admin Screen ★
-     * Contains a RecyclerView where each row contains: ★
-     * -	name ★
-     * -	password ★
-     * []	A button to delete the row ★
-     * []	A button to edit the row (click this will open a screen similar to the Register Activity)
+     *      Contains a RecyclerView where each row contains: ★
+     *      -	name ★
+     *      -	password ★
+     *      -	A button to delete the row ★
+     *      -	A button to edit the row (click this will open a screen similar to the Register Activity)
      * Below the RecyclerView are two buttons ★
-     * -	Add – opens a new Register UI to add to the list (this is where the old Register functionality will go) ★
-     * -	Clear  – clears all the current users from Realm ★
+     *      -	Add – opens a new Register UI to add to the list (this is where the old Register functionality will go) ★
+     *      -	Clear  – clears all the current users from Realm ★
      * Bonus:
-     *      Add a prompt to confirm yes or no on delete. ★
+     *      -   Add a prompt to confirm yes or no on delete. ★
      */
 
     RecyclerView recyclerView;

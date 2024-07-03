@@ -1,5 +1,6 @@
 package com.binwag.labs;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,7 +75,11 @@ public class UserAdapter extends RealmRecyclerViewAdapter<User, UserAdapter.User
             holder.editButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.e("EditButton", "Edit Button Pressed!");
+                    // Launch EditUser activity
+                    Intent editIntent = new Intent(activity, EditUser.class);
+                    editIntent.putExtra("userId", user.getUuid());
+                    activity.startActivity(editIntent);
+                    Log.d("EditButton", "Edit Button Pressed!");
                 }
             });
         }
