@@ -64,6 +64,8 @@ public class UserManagement extends AppCompatActivity {
         userAdapter = new UserAdapter(this, getAllUsers());
         recyclerView.setAdapter(userAdapter);
 
+
+
         clearRlmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,6 +73,8 @@ public class UserManagement extends AppCompatActivity {
                 clearRealmUser();
             }
         });
+
+
 
         addUsrButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +84,8 @@ public class UserManagement extends AppCompatActivity {
                 startActivity(registerActivity);
             }
         });
+
+
 
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
