@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -27,7 +28,7 @@ public class UserManagement extends AppCompatActivity {
 
     RecyclerView recyclerView;
     Button clearRlmButton, addUsrButton;
-    ImageView imageView; // ImageView for adding an image
+    ImageButton imageButton; // ImageView for adding an image
 
     private Realm realm;
     private UserAdapter userAdapter;
@@ -50,6 +51,7 @@ public class UserManagement extends AppCompatActivity {
         recyclerView = findViewById(R.id.rvUsers);
         clearRlmButton = findViewById(R.id.btnClearRealm);
         addUsrButton = findViewById(R.id.btnAddRealmUsr);
+        imageButton = findViewById(R.id.btnCaptureImage);
 
         // initialize RecyclerView
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -76,6 +78,13 @@ public class UserManagement extends AppCompatActivity {
                 Log.d("Admin Functions", "Add User Button Clicked");
                 Intent registerActivity = new Intent(UserManagement.this, RegisterActivity.class);
                 startActivity(registerActivity);
+            }
+        });
+
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }
@@ -118,7 +127,4 @@ public class UserManagement extends AppCompatActivity {
             }
         });
     }
-
-    
-
 }
