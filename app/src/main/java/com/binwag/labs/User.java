@@ -10,10 +10,11 @@ import io.realm.annotations.PrimaryKey;
 public class User extends RealmObject{
 
     @PrimaryKey
-    private String uuid = UUID.randomUUID().toString();;
+    private String uuid = UUID.randomUUID().toString();
 
     private String name;
     private String password;
+    private String imageUrl;
 
     public String getUuid() {
         return uuid;
@@ -39,13 +40,22 @@ public class User extends RealmObject{
         this.password = password;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     @NonNull
     @Override
     public String toString() {
-        return "Item{" +
+        return "User{" +
                 "uuid='" + uuid + '\'' +
                 ", name='" + name + '\'' +
-                ", price=" + password +
+                ", password='" + password + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
                 '}';
     }
 }
