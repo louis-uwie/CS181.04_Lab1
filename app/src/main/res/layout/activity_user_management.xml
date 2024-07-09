@@ -25,8 +25,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvUsers"
-        android:layout_width="237dp"
-        android:layout_height="238dp"
+        android:layout_width="309dp"
+        android:layout_height="192dp"
         android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="@+id/tvAdminHeader"
         app:layout_constraintHorizontal_bias="0.489"

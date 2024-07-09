@@ -1,41 +1,79 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="4dp">
 
-    <TextView
-        android:id="@+id/tvUserName"
+    <!-- User Details Container -->
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="2"
-        android:text="User Name"
-        android:textSize="12sp" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="8dp"
+        tools:ignore="RtlSymmetry">
 
-    <TextView
-        android:id="@+id/tvUserPassword"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:text="User Password"
-        android:textSize="12sp" />
+        <!-- User Name TextView -->
+        <TextView
+            android:id="@+id/tvUserName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="User Name"
+            android:textSize="12sp" />
 
-    <Button
-        android:id="@+id/btnEdit"
+        <!-- User Password TextView -->
+        <TextView
+            android:id="@+id/tvUserPassword"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="User Password"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <!-- Edit and Delete Buttons Container -->
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Edit"
-        android:textSize="8sp"
-        android:minWidth="0dp"
-        android:minHeight="0dp"/>
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="8dp">
 
-    <Button
-        android:id="@+id/btnDelete"
+        <!-- Edit Button -->
+        <Button
+            android:id="@+id/btnEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:text="Edit"
+            android:textSize="8sp"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <!-- Delete Button -->
+        <Button
+            android:id="@+id/btnDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:text="Delete"
+            android:textSize="8sp"
+            tools:ignore="TouchTargetSizeCheck" />
+
+    </LinearLayout>
+
+    <!-- ImageButton for Image Capture -->
+    <ImageButton
+        android:id="@+id/btnCaptureImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Delete"
-        android:textSize="8sp"
-        android:minWidth="0dp"
-        android:minHeight="0dp"/>
+        android:contentDescription="Capture Image"
+        android:src="@android:drawable/ic_menu_camera"
+        android:layout_marginStart="8dp" />
 
 </LinearLayout>
