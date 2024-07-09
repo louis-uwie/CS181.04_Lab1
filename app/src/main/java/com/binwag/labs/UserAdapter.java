@@ -16,11 +16,32 @@ import io.realm.RealmRecyclerViewAdapter;
 
 public class UserAdapter extends RealmRecyclerViewAdapter<User, UserAdapter.UserViewHolder> {
 
+    /**
+     * Adding Camera functionality checklist
+     *
+     * 1) copy Android-Image_Cropper.aar to app/libs in Project View
+     * 2) update gradle files
+     * 	- cam deps and karumi deps
+     * 	- targetSDK 29 (for compatibility with the AndroidImageCropper, 30+ will result in nothing happening)
+     *
+     * 3) update manifest
+     * 	- add permissions
+     * 	- add FileProvider entry
+     * 	- copy fileprovider.xml to /xml folder
+     * 	- add fileAuthority entry in strings.xml (make sure it is the same as your package name)
+     * 	- add ImageActivity_ entry
+     *
+     * 4) copy ImageActivity.java to src/package
+     * 5) copy activity_image_capture.xml to res/layout
+     */
+
+
     public class UserViewHolder extends RecyclerView.ViewHolder{
         TextView nameTextView;
         TextView passwordTextView;
         Button deleteButton;
         Button editButton;
+
 
         public UserViewHolder(@NonNull View itemView){
             super(itemView);
@@ -33,7 +54,6 @@ public class UserAdapter extends RealmRecyclerViewAdapter<User, UserAdapter.User
         }
     }
 
-
     UserManagement activity;
 
 
@@ -41,6 +61,7 @@ public class UserAdapter extends RealmRecyclerViewAdapter<User, UserAdapter.User
         super(data, true);
         this.activity = activity;
     }
+
 
     @NonNull
     @Override
@@ -83,5 +104,4 @@ public class UserAdapter extends RealmRecyclerViewAdapter<User, UserAdapter.User
             });
         }
     }
-
 }

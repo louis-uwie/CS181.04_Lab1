@@ -1,11 +1,16 @@
 package com.binwag.labs;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,27 +25,9 @@ import io.realm.RealmResults;
 
 public class UserManagement extends AppCompatActivity {
 
-    /**
-     * TODO:
-     * Lab 3:  RecyclerView and Realm
-     * User Management ★
-     *      Using your previous, replace the “Register” with an “Admin” Button,
-     *      this will open the User Management screen ★
-     * Admin Screen ★
-     *      Contains a RecyclerView where each row contains: ★
-     *      -	name ★
-     *      -	password ★
-     *      -	A button to delete the row ★
-     *      -	A button to edit the row (click this will open a screen similar to the Register Activity)
-     * Below the RecyclerView are two buttons ★
-     *      -	Add – opens a new Register UI to add to the list (this is where the old Register functionality will go) ★
-     *      -	Clear  – clears all the current users from Realm ★
-     * Bonus:
-     *      -   Add a prompt to confirm yes or no on delete. ★
-     */
-
     RecyclerView recyclerView;
     Button clearRlmButton, addUsrButton;
+    ImageView imageView; // ImageView for adding an image
 
     private Realm realm;
     private UserAdapter userAdapter;
@@ -110,26 +97,26 @@ public class UserManagement extends AppCompatActivity {
                 realm.deleteAll();
                 Log.d("Admin Functions", "Cleared Realm");
             }
-
         });
     }
 
     public void delete(User userToDelete) {
-        Log.d("Admin Functions", "Delete User - Clicked");
-
-        String userUuid = userToDelete.getUuid();
+        String userUuid = userToDelete.getUuid(); // Assuming you have a method to get UUID of the user
 
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(@NonNull Realm realm) {
+                // Query the Realm for the user with the matching UUID
                 User user = realm.where(User.class).equalTo("uuid", userUuid).findFirst();
                 if (user != null) {
+                    // Delete the user from Realm
                     user.deleteFromRealm();
-                    Log.d("Admin Functions", "Delete User - Successfull");
+                    Log.d("Admin Functions", "Deleted user with UUID: " + userUuid);
+                } else {
+                    Log.d("Admin Functions", "User with UUID not found: " + userUuid);
                 }
             }
         });
-
-        Log.d("Admin Functions", "Delete User - Out");
     }
+
 }
