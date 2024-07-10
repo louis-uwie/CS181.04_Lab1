@@ -51,6 +51,14 @@ public class UserManagement extends AppCompatActivity {
         });
 
         checkPermissions();
+
+        //DOUBLE CHECKS IF USER IS NOT NULL BECAUSE THAT WAS AN ANNOYING 2 HOUR PROBLEM
+        if (savedInstanceState != null) {
+            String currentUserUuid = savedInstanceState.getString(STATE_CURRENT_USER_UUID);
+            if (currentUserUuid != null) {
+                currentUser = realm.where(User.class).equalTo("uuid", currentUserUuid).findFirst();
+            }
+        }
     }
 
 
