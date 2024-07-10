@@ -21,15 +21,15 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.048" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvUsers"
-        android:layout_width="237dp"
-        android:layout_height="238dp"
-        android:layout_marginTop="40dp"
+        android:layout_width="285dp"
+        android:layout_height="223dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="@+id/tvAdminHeader"
-        app:layout_constraintHorizontal_bias="0.489"
+        app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="@+id/tvAdminHeader"
         app:layout_constraintTop_toBottomOf="@+id/tvAdminHeader" />
 
@@ -51,20 +51,4 @@
         app:layout_constraintStart_toStartOf="@+id/btnAddRealmUsr"
         app:layout_constraintTop_toBottomOf="@+id/btnAddRealmUsr" />
 
-    <TextView
-        android:id="@+id/tvHeaderUser"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="User"
-        app:layout_constraintBottom_toTopOf="@+id/rvUsers"
-        app:layout_constraintStart_toStartOf="@+id/rvUsers" />
-
-    <TextView
-        android:id="@+id/tvHeaderPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:text="Password"
-        app:layout_constraintBottom_toTopOf="@+id/rvUsers"
-        app:layout_constraintStart_toEndOf="@+id/tvHeaderUser" />
 </androidx.constraintlayout.widget.ConstraintLayout>
