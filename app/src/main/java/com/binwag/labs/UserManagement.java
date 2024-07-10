@@ -1,10 +1,12 @@
 package com.binwag.labs;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -14,6 +16,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.listener.multi.BaseMultiplePermissionsListener;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -56,7 +66,46 @@ public class UserManagement extends AppCompatActivity {
             return insets;
         });
 
-        init();
+        checkPermissions();
+    }
+
+    public void checkPermissions()
+    {
+
+        // REQUEST PERMISSIONS for Android 6+
+        // THESE PERMISSIONS SHOULD MATCH THE ONES IN THE MANIFEST
+        Dexter.withContext(this)
+                .withPermissions(
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.CAMERA
+
+                )
+
+                .withListener(new BaseMultiplePermissionsListener()
+                {
+                    public void onPermissionsChecked(MultiplePermissionsReport report)
+                    {
+                        if (report.areAllPermissionsGranted())
+                        {
+                            // all permissions accepted proceed
+                            init();
+                        }
+                        else
+                        {
+                            // notify about permissions
+                            toastRequirePermissions();
+                        }
+                    }
+                })
+                .check();
+
+    }
+
+    public void toastRequirePermissions()
+    {
+        Toast.makeText(this, "You must provide permissions for app to run", Toast.LENGTH_LONG).show();
+        finish();
     }
 
     private void init() {
@@ -129,7 +178,53 @@ public class UserManagement extends AppCompatActivity {
                 }
             }
         });
-
         Log.d("Admin Functions", "Delete User - Out");
+    }
+
+    User currentUser;
+
+    public void takePhoto(User a){
+        currentUser = a;
+
+        Intent i = new Intent(this, ImageActivity.class);
+        startActivityForResult(i,0);
+    }
+
+    public void onAcativityResult(int requestCode, int responseCode, Intent data){
+        super.onActivityResult(requestCode, responseCode, data);
+
+        if(requestCode == 0){
+            if(responseCode == ImageActivity.RESULT_CODE_IMAGE_TAKEN){
+
+                byte[] jpeg = data.getByteArrayExtra("rawJpeg");
+
+                try{
+                    realm.beginTransaction();
+
+                    currentUser.setImageUrl(System.currentTimeMillis()+".jpeg");
+
+                    File savedImage = saveFile(jpeg, currentUser.getImageUrl());
+
+                    realm.copyToRealmOrUpdate(currentUser);
+                    realm.commitTransaction();
+                } catch(Exception e){
+                    e.printStackTrace();
+                    Log.d("Image Function", "Error" + e);
+                }
+            }
+        }
+    }
+
+    private File saveFile(byte[] jpeg, String name) throws IOException{
+        // this is the root directory for the images
+        File getImageDir = getExternalCacheDir();
+
+        // just a sample, normally you have a diff image name each time
+        File savedImage = new File(getImageDir, name);
+
+        FileOutputStream fos = new FileOutputStream(savedImage);
+        fos.write(jpeg);
+        fos.close();
+        return savedImage;
     }
 }
