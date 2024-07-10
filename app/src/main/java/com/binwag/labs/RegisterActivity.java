@@ -81,6 +81,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+
         CancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,10 +90,12 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+
     private boolean userExists(String username) {
         RealmResults<User> results = realm.where(User.class).equalTo("name", username).findAll();
         return !results.isEmpty();
     }
+
 
     private void saveUserToRealm(String username, String password) {
         realm.executeTransactionAsync(new Realm.Transaction() {
@@ -119,6 +122,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
+
 
     @Override
     protected void onDestroy() {

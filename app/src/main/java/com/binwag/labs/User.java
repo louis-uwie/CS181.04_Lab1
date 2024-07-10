@@ -20,17 +20,21 @@ public class User extends RealmObject{
         return uuid;
     }
 
+
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }
+
 
     public String getName() {
         return name;
     }
 
+
     public void setName(String name) {
         this.name = name;
     }
+
 
     public String getPassword(){
         return password;
@@ -40,13 +44,16 @@ public class User extends RealmObject{
         this.password = password;
     }
 
+
     public String getImageUrl() {
         return imageUrl;
     }
 
+
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
 
     @NonNull
     @Override

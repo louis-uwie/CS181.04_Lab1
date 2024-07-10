@@ -51,15 +51,8 @@ public class UserManagement extends AppCompatActivity {
         });
 
         checkPermissions();
-
-        // Restore currentUser if savedInstanceState is not null
-        if (savedInstanceState != null) {
-            String currentUserUuid = savedInstanceState.getString(STATE_CURRENT_USER_UUID);
-            if (currentUserUuid != null) {
-                currentUser = realm.where(User.class).equalTo("uuid", currentUserUuid).findFirst();
-            }
-        }
     }
+
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
@@ -68,6 +61,7 @@ public class UserManagement extends AppCompatActivity {
             outState.putString(STATE_CURRENT_USER_UUID, currentUser.getUuid());
         }
     }
+
 
     public void checkPermissions() {
         Dexter.withContext(this)
@@ -88,10 +82,12 @@ public class UserManagement extends AppCompatActivity {
                 .check();
     }
 
+
     public void toastRequirePermissions() {
         Toast.makeText(this, "You must provide permissions for app to run", Toast.LENGTH_LONG).show();
         finish();
     }
+
 
     private void init() {
         recyclerView = findViewById(R.id.rvUsers);
@@ -118,11 +114,13 @@ public class UserManagement extends AppCompatActivity {
         });
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         realm.close();
     }
+
 
     private RealmResults<User> getAllUsers() {
         return realm.where(User.class).findAll();
@@ -134,6 +132,7 @@ public class UserManagement extends AppCompatActivity {
             Log.d("Admin Functions", "Cleared Realm");
         });
     }
+
 
     public void delete(User userToDelete) {
         Log.d("Admin Functions", "Delete User - Clicked");
@@ -150,41 +149,6 @@ public class UserManagement extends AppCompatActivity {
         Log.d("Admin Functions", "Delete User - Out");
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int responseCode, Intent data) {
-//        super.onActivityResult(requestCode, responseCode, data);
-//
-//        if (requestCode == 0 && responseCode == ImageActivity.RESULT_CODE_IMAGE_TAKEN) {
-//            byte[] jpeg = data.getByteArrayExtra("rawJpeg");
-//
-//            if (currentUser != null) {
-//                try {
-//                    realm.executeTransaction(realm -> {
-//                        String imageUrl = System.currentTimeMillis() + ".jpeg";
-//                        currentUser.setImageUrl(imageUrl);
-//
-//                        File savedImage = saveFile(jpeg, imageUrl);
-//                        if (savedImage != null) {
-//                            Log.d("Image Function", "Image saved at: " + savedImage.getAbsolutePath());
-//                            realm.copyToRealmOrUpdate(currentUser);
-//                        } else {
-//                            Log.d("Image Function", "Failed to save image.");
-//                        }
-//                    });
-//
-//                    // Notify the adapter of changes
-//                    userAdapter.notifyDataSetChanged();
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    Log.d("Image Function", "Error: " + e);
-//                } finally {
-//                    currentUser = null; // Reset currentUser after handling
-//                }
-//            } else {
-//                Log.d("Image Function", "currentUser is null when processing the image.");
-//            }
-//        }
-//    }
 
     public void takePhoto(User user) {
         currentUser = user;
@@ -192,6 +156,8 @@ public class UserManagement extends AppCompatActivity {
         Intent i = new Intent(this, ImageActivity.class);
         startActivityForResult(i, 0);
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int responseCode, Intent data) {
@@ -204,26 +170,27 @@ public class UserManagement extends AppCompatActivity {
                 String userUuid = currentUser.getUuid(); // Store user UUID
                 String imageUrl = System.currentTimeMillis() + ".jpeg"; // Generate image URL
 
-                // Save image and update Realm in a background thread
                 realm.executeTransactionAsync(realm -> {
-                    // Retrieve the user from Realm using the stored UUID
                     User user = realm.where(User.class).equalTo("uuid", userUuid).findFirst();
                     if (user != null) {
-                        user.setImageUrl(imageUrl); // Update user's image URL
-                        // Save image file
+
+                        user.setImageUrl(imageUrl);
                         File savedImage = saveFile(jpeg, imageUrl);
+
                         if (savedImage != null) {
                             Log.d("Image Function", "Image saved at: " + savedImage.getAbsolutePath());
+
                         } else {
                             Log.d("Image Function", "Failed to save image.");
+
                         }
                     } else {
                         Log.d("Image Function", "User not found in Realm.");
+
                     }
                 }, new Realm.Transaction.OnSuccess() {
                     @Override
                     public void onSuccess() {
-                        // Notify the adapter of changes if needed
                         runOnUiThread(() -> {
                             userAdapter.notifyDataSetChanged();
                         });
@@ -234,8 +201,6 @@ public class UserManagement extends AppCompatActivity {
                         Log.e("Image Function", "Error saving image: " + error.getMessage());
                     }
                 });
-
-                // Reset currentUser after handling
                 currentUser = null;
             } else {
                 Log.d("Image Function", "currentUser is null when processing the image.");

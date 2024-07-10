@@ -23,6 +23,7 @@ public class LoginActivity extends AppCompatActivity {
     SharedPreferences myAccounts;
     Realm realm;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
         adminButton.setOnClickListener(v -> adminLog());
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -68,6 +70,7 @@ public class LoginActivity extends AppCompatActivity {
             realm.close();
         }
     }
+
 
     public void login() {
         String inputUsername = usernameInput.getText().toString();
@@ -92,6 +95,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+
     private void handleSuccessfulLogin(User user) {
         Toast.makeText(this, "Login Successful.", Toast.LENGTH_SHORT).show();
 
@@ -104,15 +108,16 @@ public class LoginActivity extends AppCompatActivity {
             saveRememberMeState(false);
             clearCredentials();
         }
-
         startActivity(new Intent(this, WelcomeActivity.class));
         finish();
     }
+
 
     public void adminLog() {
         Intent adminActivity = new Intent(this, UserManagement.class);
         startActivity(adminActivity);
     }
+
 
     public void register() {
         Intent registerActivity = new Intent(this, RegisterActivity.class);
@@ -122,10 +127,12 @@ public class LoginActivity extends AppCompatActivity {
         passwordInput.setText("");
     }
 
+
     public void clear() {
         clearCredentials();
         Toast.makeText(this, "Shared Preferences Cleared", Toast.LENGTH_SHORT).show();
     }
+
 
     private void saveCredentials(String username, String password) {
         SharedPreferences.Editor editor = myAccounts.edit();
@@ -134,11 +141,13 @@ public class LoginActivity extends AppCompatActivity {
         editor.apply();
     }
 
+
     private void saveRememberMeState(boolean isChecked) {
         SharedPreferences.Editor editor = myAccounts.edit();
         editor.putBoolean("rememberMe", isChecked);
         editor.apply();
     }
+
 
     private void clearCredentials() {
         SharedPreferences.Editor editor = myAccounts.edit();
@@ -146,8 +155,8 @@ public class LoginActivity extends AppCompatActivity {
         editor.remove("password");
         editor.remove("rememberMe");
         editor.apply();
-
     }
+
 
     private void saveUuid(String uuid) {
         SharedPreferences.Editor editor = myAccounts.edit();
@@ -155,21 +164,3 @@ public class LoginActivity extends AppCompatActivity {
         editor.apply();
     }
 }
-
-/**
- * Lab 3:  RecyclerView and Realm
- * User Management
- * Using your previous, replace the “Register” with an “Admin” Button, this will open the User Management screen
- * Admin Screen
- * Contains a RecyclerView where each row contains:
- * -	name
- * -	password
- * -	A button to delete the row
- * -	A button to edit the row (click this will open a screen similar to the Register Activity)
- * Below the RecyclerView are two buttons
- * -	Add – opens a new Register UI to add to the list (this is where the old Register functionality will go)
- * -	Clear  – clears all the current users from Realm
- *
- * Bonus:
- * Add a prompt to confirm yes or no on delete.
- */

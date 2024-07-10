@@ -38,6 +38,7 @@ public class ImageActivity extends AppCompatActivity {
     public static int MAX_WIDTH = 500;
     public static int MAX_HEIGHT = 500;
 
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +56,7 @@ public class ImageActivity extends AppCompatActivity {
     CropImageView cropImageView;
     private ImageButton capture, rotate, crop;
     private Button cancel;
+
 
     public void init(){
         fileAuthority = "com.binwag.labs";
@@ -123,14 +125,10 @@ public class ImageActivity extends AppCompatActivity {
             System.out.println(cropped.getWidth()+" x "+cropped.getHeight());
             cropImageView.setImageBitmap(cropped);
 
-
-            // encode image to JPEG format
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             cropped.compress(Bitmap.CompressFormat.JPEG, 100, stream);
             byte[] byteArray = stream.toByteArray();
 
-
-            // send this path back
             Intent i = new Intent();
             i.putExtra("rawJpeg", byteArray);
 
@@ -140,13 +138,10 @@ public class ImageActivity extends AppCompatActivity {
     }
 
 
-
-    // PHONE CAMERA APP will return here once done
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // do stuff here
         if (requestCode==200) {
             if (resultCode == Activity.RESULT_OK) {
 
@@ -155,7 +150,6 @@ public class ImageActivity extends AppCompatActivity {
 
                 System.out.println("URI: " + imageUri.getPath());
 
-                // update cropImageView
                 cropImageView.setImageUriAsync(imageUri);
             }
         }

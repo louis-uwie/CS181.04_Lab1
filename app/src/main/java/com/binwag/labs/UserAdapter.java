@@ -43,10 +43,12 @@ public class UserAdapter extends RealmRecyclerViewAdapter<User, UserAdapter.User
 
     UserManagement activity;
 
+
     public UserAdapter(UserManagement activity, OrderedRealmCollection<User> data) {
         super(data, true);
         this.activity = activity;
     }
+
 
     @NonNull
     @Override
@@ -106,5 +108,4 @@ public class UserAdapter extends RealmRecyclerViewAdapter<User, UserAdapter.User
             }
         }
     }
-
 }
