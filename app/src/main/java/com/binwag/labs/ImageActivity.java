@@ -38,7 +38,7 @@ public class ImageActivity extends AppCompatActivity {
     public static int MAX_WIDTH = 500;
     public static int MAX_HEIGHT = 500;
 
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
