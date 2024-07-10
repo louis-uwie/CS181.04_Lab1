@@ -56,8 +56,6 @@ public class ImageActivity extends AppCompatActivity {
     private ImageButton capture, rotate, crop;
     private Button cancel;
 
-
-
     public void init(){
         fileAuthority = "com.binwag.labs";
 
@@ -101,11 +99,9 @@ public class ImageActivity extends AppCompatActivity {
     }
 
 
-
     public void capture() {
         startActivityForResult(getPickImageChooserIntent(), 200);
     }
-
 
 
     public void rotate() {
@@ -113,11 +109,9 @@ public class ImageActivity extends AppCompatActivity {
     }
 
 
-
     public void cancel() {
         finish();
     }
-
 
 
     public void crop() {

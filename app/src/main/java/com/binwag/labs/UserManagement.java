@@ -30,12 +30,14 @@ import io.realm.RealmResults;
 
 public class UserManagement extends AppCompatActivity {
 
+    private static final String STATE_CURRENT_USER_UUID = "current_user_uuid";
+
     RecyclerView recyclerView;
     Button clearRlmButton, addUsrButton;
 
     private Realm realm;
     private UserAdapter userAdapter;
-    User currentUser;
+    private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,22 @@ public class UserManagement extends AppCompatActivity {
         });
 
         checkPermissions();
+
+        // Restore currentUser if savedInstanceState is not null
+        if (savedInstanceState != null) {
+            String currentUserUuid = savedInstanceState.getString(STATE_CURRENT_USER_UUID);
+            if (currentUserUuid != null) {
+                currentUser = realm.where(User.class).equalTo("uuid", currentUserUuid).findFirst();
+            }
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (currentUser != null) {
+            outState.putString(STATE_CURRENT_USER_UUID, currentUser.getUuid());
+        }
     }
 
     public void checkPermissions() {
@@ -132,6 +150,42 @@ public class UserManagement extends AppCompatActivity {
         Log.d("Admin Functions", "Delete User - Out");
     }
 
+//    @Override
+//    protected void onActivityResult(int requestCode, int responseCode, Intent data) {
+//        super.onActivityResult(requestCode, responseCode, data);
+//
+//        if (requestCode == 0 && responseCode == ImageActivity.RESULT_CODE_IMAGE_TAKEN) {
+//            byte[] jpeg = data.getByteArrayExtra("rawJpeg");
+//
+//            if (currentUser != null) {
+//                try {
+//                    realm.executeTransaction(realm -> {
+//                        String imageUrl = System.currentTimeMillis() + ".jpeg";
+//                        currentUser.setImageUrl(imageUrl);
+//
+//                        File savedImage = saveFile(jpeg, imageUrl);
+//                        if (savedImage != null) {
+//                            Log.d("Image Function", "Image saved at: " + savedImage.getAbsolutePath());
+//                            realm.copyToRealmOrUpdate(currentUser);
+//                        } else {
+//                            Log.d("Image Function", "Failed to save image.");
+//                        }
+//                    });
+//
+//                    // Notify the adapter of changes
+//                    userAdapter.notifyDataSetChanged();
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    Log.d("Image Function", "Error: " + e);
+//                } finally {
+//                    currentUser = null; // Reset currentUser after handling
+//                }
+//            } else {
+//                Log.d("Image Function", "currentUser is null when processing the image.");
+//            }
+//        }
+//    }
+
     public void takePhoto(User user) {
         currentUser = user;
         Log.d("Image Function", "takePhoto: currentUser set to " + user.getUuid());
@@ -147,33 +201,49 @@ public class UserManagement extends AppCompatActivity {
             byte[] jpeg = data.getByteArrayExtra("rawJpeg");
 
             if (currentUser != null) {
-                try {
-                    realm.executeTransaction(realm -> {
-                        String imageUrl = System.currentTimeMillis() + ".jpeg";
-                        currentUser.setImageUrl(imageUrl);
+                String userUuid = currentUser.getUuid(); // Store user UUID
+                String imageUrl = System.currentTimeMillis() + ".jpeg"; // Generate image URL
 
+                // Save image and update Realm in a background thread
+                realm.executeTransactionAsync(realm -> {
+                    // Retrieve the user from Realm using the stored UUID
+                    User user = realm.where(User.class).equalTo("uuid", userUuid).findFirst();
+                    if (user != null) {
+                        user.setImageUrl(imageUrl); // Update user's image URL
+                        // Save image file
                         File savedImage = saveFile(jpeg, imageUrl);
                         if (savedImage != null) {
                             Log.d("Image Function", "Image saved at: " + savedImage.getAbsolutePath());
-                            realm.copyToRealmOrUpdate(currentUser);
                         } else {
                             Log.d("Image Function", "Failed to save image.");
                         }
-                    });
+                    } else {
+                        Log.d("Image Function", "User not found in Realm.");
+                    }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        // Notify the adapter of changes if needed
+                        runOnUiThread(() -> {
+                            userAdapter.notifyDataSetChanged();
+                        });
+                    }
+                }, new Realm.Transaction.OnError() {
+                    @Override
+                    public void onError(Throwable error) {
+                        Log.e("Image Function", "Error saving image: " + error.getMessage());
+                    }
+                });
 
-                    // Notify the adapter of changes
-                    userAdapter.notifyDataSetChanged();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.d("Image Function", "Error: " + e);
-                } finally {
-                    currentUser = null; // Reset currentUser after handling
-                }
+                // Reset currentUser after handling
+                currentUser = null;
             } else {
                 Log.d("Image Function", "currentUser is null when processing the image.");
             }
         }
     }
+
+
 
     private File saveFile(byte[] jpeg, String name) {
         File getImageDir = getExternalCacheDir();
