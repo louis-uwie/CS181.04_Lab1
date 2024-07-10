@@ -66,52 +66,43 @@ public class UserAdapter extends RealmRecyclerViewAdapter<User, UserAdapter.User
             holder.nameTextView.setText(user.getName());
             holder.passwordTextView.setText(user.getPassword());
 
-            //DELETE METHOD
+            // DELETE METHOD
             holder.deleteButton.setTag(user);
-            holder.deleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.d("Admin Functions", "Delete Button Clicked");
-                    User userToDelete = (User) view.getTag();
-                    activity.delete(userToDelete);
-                }
+            holder.deleteButton.setOnClickListener(view -> {
+                Log.d("Admin Functions", "Delete Button Clicked");
+                User userToDelete = (User) view.getTag();
+                activity.delete(userToDelete);
             });
 
-            //EDIT METHOD
-            holder.editButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d("Admin Functions", "Edit User Button Clicked");
-                    Intent editIntent = new Intent(activity, EditUser.class);
-                    editIntent.putExtra("userId", user.getUuid());
-                    activity.startActivity(editIntent);
-                }
+            // EDIT METHOD
+            holder.editButton.setOnClickListener(v -> {
+                Log.d("Admin Functions", "Edit User Button Clicked");
+                Intent editIntent = new Intent(activity, EditUser.class);
+                editIntent.putExtra("userId", user.getUuid());
+                activity.startActivity(editIntent);
             });
 
-            holder.imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    activity.takePhoto(user);
-                }
-            });
+            holder.imageView.setOnClickListener(view -> activity.takePhoto(user));
 
+            // Load the user image
             File getImageDir = activity.getExternalCacheDir();
-
-            // just a sample, normally you have a diff image name each time
-            if (user.getImageUrl()!=null) {
+            if (user.getImageUrl() != null) {
                 File file = new File(getImageDir, user.getImageUrl());
 
                 if (file.exists()) {
-                    // this will put the image saved to the file system to the imageview
+                    // Load the image into the ImageView using Picasso
                     Picasso.get()
                             .load(file)
                             .networkPolicy(NetworkPolicy.NO_CACHE)
                             .memoryPolicy(MemoryPolicy.NO_CACHE)
                             .into(holder.imageView);
                 } else {
-                    // use a default picture
+                    // Use a default picture if the file doesn't exist
                     holder.imageView.setImageResource(R.mipmap.ic_launcher);
                 }
+            } else {
+                // Use a default picture if the user has no image
+                holder.imageView.setImageResource(R.mipmap.ic_launcher);
             }
         }
     }

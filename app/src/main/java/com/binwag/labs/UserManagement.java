@@ -30,30 +30,12 @@ import io.realm.RealmResults;
 
 public class UserManagement extends AppCompatActivity {
 
-    /**
-     * TODO:
-     * Lab 3:  RecyclerView and Realm
-     * User Management ★
-     *      Using your previous, replace the “Register” with an “Admin” Button,
-     *      this will open the User Management screen ★
-     * Admin Screen ★
-     *      Contains a RecyclerView where each row contains: ★
-     *      -	name ★
-     *      -	password ★
-     *      -	A button to delete the row ★
-     *      -	A button to edit the row (click this will open a screen similar to the Register Activity)
-     * Below the RecyclerView are two buttons ★
-     *      -	Add – opens a new Register UI to add to the list (this is where the old Register functionality will go) ★
-     *      -	Clear  – clears all the current users from Realm ★
-     * Bonus:
-     *      -   Add a prompt to confirm yes or no on delete. ★
-     */
-
     RecyclerView recyclerView;
     Button clearRlmButton, addUsrButton;
 
     private Realm realm;
     private UserAdapter userAdapter;
+    User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,41 +51,26 @@ public class UserManagement extends AppCompatActivity {
         checkPermissions();
     }
 
-    public void checkPermissions()
-    {
-
-        // REQUEST PERMISSIONS for Android 6+
-        // THESE PERMISSIONS SHOULD MATCH THE ONES IN THE MANIFEST
+    public void checkPermissions() {
         Dexter.withContext(this)
                 .withPermissions(
-                        android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         Manifest.permission.CAMERA
-
                 )
-
-                .withListener(new BaseMultiplePermissionsListener()
-                {
-                    public void onPermissionsChecked(MultiplePermissionsReport report)
-                    {
-                        if (report.areAllPermissionsGranted())
-                        {
-                            // all permissions accepted proceed
+                .withListener(new BaseMultiplePermissionsListener() {
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        if (report.areAllPermissionsGranted()) {
                             init();
-                        }
-                        else
-                        {
-                            // notify about permissions
+                        } else {
                             toastRequirePermissions();
                         }
                     }
                 })
                 .check();
-
     }
 
-    public void toastRequirePermissions()
-    {
+    public void toastRequirePermissions() {
         Toast.makeText(this, "You must provide permissions for app to run", Toast.LENGTH_LONG).show();
         finish();
     }
@@ -113,32 +80,23 @@ public class UserManagement extends AppCompatActivity {
         clearRlmButton = findViewById(R.id.btnClearRealm);
         addUsrButton = findViewById(R.id.btnAddRealmUsr);
 
-        // initialize RecyclerView
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        // initialize Realm
         realm = Realm.getDefaultInstance();
 
-        // set up the adapter
         userAdapter = new UserAdapter(this, getAllUsers());
         recyclerView.setAdapter(userAdapter);
 
-        clearRlmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("Admin Functions", "Clear Realm Button Clicked");
-                clearRealmUser();
-            }
+        clearRlmButton.setOnClickListener(v -> {
+            Log.d("Admin Functions", "Clear Realm Button Clicked");
+            clearRealmUser();
         });
 
-        addUsrButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("Admin Functions", "Add User Button Clicked");
-                Intent registerActivity = new Intent(UserManagement.this, RegisterActivity.class);
-                startActivity(registerActivity);
-            }
+        addUsrButton.setOnClickListener(v -> {
+            Log.d("Admin Functions", "Add User Button Clicked");
+            Intent registerActivity = new Intent(UserManagement.this, RegisterActivity.class);
+            startActivity(registerActivity);
         });
     }
 
@@ -153,13 +111,9 @@ public class UserManagement extends AppCompatActivity {
     }
 
     private void clearRealmUser() {
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(@NonNull Realm realm) {
-                realm.deleteAll();
-                Log.d("Admin Functions", "Cleared Realm");
-            }
-
+        realm.executeTransactionAsync(realm -> {
+            realm.deleteAll();
+            Log.d("Admin Functions", "Cleared Realm");
         });
     }
 
@@ -168,63 +122,70 @@ public class UserManagement extends AppCompatActivity {
 
         String userUuid = userToDelete.getUuid();
 
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(@NonNull Realm realm) {
-                User user = realm.where(User.class).equalTo("uuid", userUuid).findFirst();
-                if (user != null) {
-                    user.deleteFromRealm();
-                    Log.d("Admin Functions", "Delete User - Successfull");
-                }
+        realm.executeTransactionAsync(realm -> {
+            User user = realm.where(User.class).equalTo("uuid", userUuid).findFirst();
+            if (user != null) {
+                user.deleteFromRealm();
+                Log.d("Admin Functions", "Delete User - Successful");
             }
         });
         Log.d("Admin Functions", "Delete User - Out");
     }
 
-    User currentUser;
-
-    public void takePhoto(User a){
-        currentUser = a;
-
+    public void takePhoto(User user) {
+        currentUser = user;
+        Log.d("Image Function", "takePhoto: currentUser set to " + user.getUuid());
         Intent i = new Intent(this, ImageActivity.class);
-        startActivityForResult(i,0);
+        startActivityForResult(i, 0);
     }
 
-    public void onAcativityResult(int requestCode, int responseCode, Intent data){
+    @Override
+    protected void onActivityResult(int requestCode, int responseCode, Intent data) {
         super.onActivityResult(requestCode, responseCode, data);
 
-        if(requestCode == 0){
-            if(responseCode == ImageActivity.RESULT_CODE_IMAGE_TAKEN){
+        if (requestCode == 0 && responseCode == ImageActivity.RESULT_CODE_IMAGE_TAKEN) {
+            byte[] jpeg = data.getByteArrayExtra("rawJpeg");
 
-                byte[] jpeg = data.getByteArrayExtra("rawJpeg");
+            if (currentUser != null) {
+                try {
+                    realm.executeTransaction(realm -> {
+                        String imageUrl = System.currentTimeMillis() + ".jpeg";
+                        currentUser.setImageUrl(imageUrl);
 
-                try{
-                    realm.beginTransaction();
+                        File savedImage = saveFile(jpeg, imageUrl);
+                        if (savedImage != null) {
+                            Log.d("Image Function", "Image saved at: " + savedImage.getAbsolutePath());
+                            realm.copyToRealmOrUpdate(currentUser);
+                        } else {
+                            Log.d("Image Function", "Failed to save image.");
+                        }
+                    });
 
-                    currentUser.setImageUrl(System.currentTimeMillis()+".jpeg");
-
-                    File savedImage = saveFile(jpeg, currentUser.getImageUrl());
-
-                    realm.copyToRealmOrUpdate(currentUser);
-                    realm.commitTransaction();
-                } catch(Exception e){
+                    // Notify the adapter of changes
+                    userAdapter.notifyDataSetChanged();
+                } catch (Exception e) {
                     e.printStackTrace();
-                    Log.d("Image Function", "Error" + e);
+                    Log.d("Image Function", "Error: " + e);
+                } finally {
+                    currentUser = null; // Reset currentUser after handling
                 }
+            } else {
+                Log.d("Image Function", "currentUser is null when processing the image.");
             }
         }
     }
 
-    private File saveFile(byte[] jpeg, String name) throws IOException{
-        // this is the root directory for the images
+    private File saveFile(byte[] jpeg, String name) {
         File getImageDir = getExternalCacheDir();
-
-        // just a sample, normally you have a diff image name each time
         File savedImage = new File(getImageDir, name);
 
-        FileOutputStream fos = new FileOutputStream(savedImage);
-        fos.write(jpeg);
-        fos.close();
-        return savedImage;
+        try (FileOutputStream fos = new FileOutputStream(savedImage)) {
+            fos.write(jpeg);
+            Log.d("Image Function", "File saved to: " + savedImage.getAbsolutePath());
+            return savedImage;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
